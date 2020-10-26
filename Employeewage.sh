@@ -21,13 +21,13 @@ fi
 isPartTime=1
 isFullTime=2
 empRatePerHr=20
-randomCheck=$(( RANDOM%3 ))
+empCheck=$(( RANDOM%3 ))
 
-if [ $isPartTime -eq $randomCheck ]
+if [ $isPartTime -eq $empCheck ]
 then
 	empHrs=8
 	salary=$(($empHrs*$empRatePerHr))
-elif [ $isFullTime -eq $randomCheck ]
+elif [ $isFullTime -eq $empCheck ]
 then
 	empHrs=16
 	salary=$(($empHrs*$empRatePerHr))
@@ -35,20 +35,11 @@ else
 	empHrs=0
 fi
 
-echo "Employee Wage Using Case Statement"
-case $randomCheck in
-	$isFullTime)empHrs=8 ;;
-	$isPartTime)empHrs=4 ;;
-	*)
-	empHrs=0 ;;
-esac
-salary=$(($empHrs*$empRatePerHr))
-
 totalSalary=0;
 numWorkingDays=20;
 for (( day=1; day<=$numWorkingDays; day++ ))
 do
-	case $randomCheck in
+	case $empCheck in
 		$isFullTime)empHrs=8 ;;
 		$isPartTime)empHrs=4 ;;
 		*)
@@ -58,13 +49,12 @@ do
 	totalSalary=$(( $totalSalary+$salary ))
 done
 
+
 maxHrsInMonth=100
 totalEmpHrs=0
 totalWorkingDays=0
-while [[ $totalEmpHrs -lt $maxHrsInMonth && $totalWorkingDays -lt $numWorkingDays ]]
-do
-        totalWorkingDays=$(($totalWorkingDays+1))
-        case $empCheck in
+function getWorkingHours() {
+        case $1 in
                 $isPartTime)
                         empHrs=4
                         ;;
@@ -75,6 +65,14 @@ do
                         empHrs=0
                         ;;
         esac
-        totalEmpHrs=$(($totalEmpHrs+$empHrs))
+	echo $empHrs
+}
+while [[ $totalEmpHrs -lt $maxHrsInMonth && $totalWorkingDays -lt $numWorkingDays ]]
+do
+        totalWorkingDays=$(($totalWorkingDays+1))
+	empHrs=$(getWorkingHours $((RANDOM%3)) )
+	totalEmpHrs=$(($totalEmpHrs+$empHrs))
         totalSalary=$(($totalSalary+($totalEmpHrs*$empRatePerHr)))
 done
+echo "total salary of employee:" $totalSalary
+
