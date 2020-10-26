@@ -57,3 +57,24 @@ do
 	salary=$(($empHrs*$empRatePerHr))
 	totalSalary=$(( $totalSalary+$salary ))
 done
+
+maxHrsInMonth=100
+totalEmpHrs=0
+totalWorkingDays=0
+while [[ $totalEmpHrs -lt $maxHrsInMonth && $totalWorkingDays -lt $numWorkingDays ]]
+do
+        totalWorkingDays=$(($totalWorkingDays+1))
+        case $empCheck in
+                $isPartTime)
+                        empHrs=4
+                        ;;
+                $isFullTime)
+                        empHrs=8
+   			;;
+                *)
+                        empHrs=0
+                        ;;
+        esac
+        totalEmpHrs=$(($totalEmpHrs+$empHrs))
+        totalSalary=$(($totalSalary+($totalEmpHrs*$empRatePerHr)))
+done
