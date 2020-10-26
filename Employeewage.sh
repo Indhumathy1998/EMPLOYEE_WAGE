@@ -49,7 +49,6 @@ do
 	totalSalary=$(( $totalSalary+$salary ))
 done
 
-
 maxHrsInMonth=100
 totalEmpHrs=0
 totalWorkingDays=0
@@ -67,19 +66,11 @@ function getWorkingHours() {
         esac
 	echo $empHrs
 }
-
-function calDailyWages() {
-        totalWorkHours=$1
-        wages=$(( $totalWorkHours*$empRatePerHr ))
-        echo $wages
-}
-
 while [[ $totalEmpHrs -lt $maxHrsInMonth && $totalWorkingDays -lt $numWorkingDays ]]
 do
         totalWorkingDays=$(($totalWorkingDays+1))
 	empHrs=$(getWorkingHours $((RANDOM%3)) )
 	totalEmpHrs=$(($totalEmpHrs+$empHrs))
-        DailyWages[$totalWorkingDays]="$( calDailyWages $empHrs )"
+        totalSalary=$(($totalSalary+($totalEmpHrs*$empRatePerHr)))
 done
-totalSalary="$( calDailyWages $totalEmpHrs )"
-echo "daily wages:" ${DailyWages[@]}
+echo "total salary of employee:" $totalSalary
